@@ -1,14 +1,22 @@
 from trello_connection import get_trello_client
 
+BREAK = "Break"
+TOMATO = "Tomato"
+
 class Orchestrator:
     
-    def __init__(self) -> None:
-        self.trello_client = get_trello_client()
+    def __init__(self, start_with_break) -> None:
+        if(start_with_break):
+            self.current_block = BREAK
+        else:
+            self.current_block = TOMATO
+        # self.trello_client = get_trello_client()
         # Get boards and lists
         pass
 
-    def orchestrate(self) -> None:
+    def orchestrate(self) -> dict:
         # Define if it's break, tomato or eod
+        # Return values for notification
         pass
 
     def start_break(self) -> None:

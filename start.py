@@ -1,22 +1,25 @@
-from trello_connection import get_trello_client
+from win11toast import toast
+from scheduler import Scheduler
+import threading
+import time
+import signal
+import sys
 
-def main():
-    try:
-        client = get_trello_client()
-    except Exception as e:
-        print("Connection failed, finishing script execution")
-        return
-    boards = client.list_boards()
-    board = next(filter(lambda x: x.name.startswith("1"), boards))
-    print(str(board.name))
-    lists = board.all_lists()
-    today_list = next(filter(lambda x: x.name.startswith("Hoy"), lists))
-    x = today_list.fetch_actions(action_filter='all')
-    print(str(today_list.name))
-    print(str(x))
-    cards = today_list.list_cards()
-    pos = len(cards)
-    for card in cards:
-        print(str(card.name),str(card.due), str(card.pos))
+def get_time(block_type) -> int:
+    user_input = toast(block_type, "Specify time, 0 to exit", input="time", button="OK", duration='long', dialogue='Hola mundo')
+    if(len(user_input) == 1):
+        return 0
+    return(int(user_input.get("user_input").get("time")))
+
+def main() -> None:
+    start_with_break = False
+    if(len(sys.argv) == 2):
+        start_with_break = bool(sys.argv[1])
+    scheduler = Scheduler(start_with_break)
+    scheduler.timer_loop()
+    def signal_handler(signum, frame):
+        print("Received signal")
+        exit()
+    #signal.signal(signal.SIGINT, signal_handler)
     
 main()
