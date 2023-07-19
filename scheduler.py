@@ -19,6 +19,8 @@ class Scheduler:
                 duration='long',
                 dialogue=dialogue)
             timer = int(user_input.get("user_input").get("time"))
+            user_input = None
+            del user_input  
         except Exception as e:
             print("Error getting time")
             print("Error", str(e))
@@ -31,5 +33,5 @@ class Scheduler:
         while timer != 0:
             timer = self.notify()
             if(timer < 0):
-                timer = 1
+                timer = 0
             time.sleep(timer * 60)
